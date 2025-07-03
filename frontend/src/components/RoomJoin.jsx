@@ -14,7 +14,7 @@ const RoomJoin = ({ setRoomId }) => {
 
     try {
       toast.info("🖌️ Joining room... loading whiteboard");
-      const res = await axios.post('http://localhost:3000/api/rooms/join', { roomId: input });
+      const res = await axios.post('https://whiteboardassignment.vercel.app/api/rooms/join', { roomId: input });
       setRoomId(res.data.roomId);
       toast.success("✅ Joined room successfully!");
     } catch (err) {
