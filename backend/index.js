@@ -7,33 +7,40 @@ const socketHandler = require('./socket/index');
 const roomRoutes = require('./routes/roomRoutes');
 const drawingRoutes = require('./routes/drawingRoutes');
 
+// ✅ Step 1: Create app FIRST
 const app = express();
+
+// ✅ Step 2: Now you can use app to create http server
+const httpServer = http.createServer(app);
+
+// ✅ Step 3: Connect to DB
 connectDB();
 
-const server = http.createServer(app);
-const io = require('socket.io')(server, {
+// ✅ Step 4: Setup socket.io
+const { Server } = require("socket.io");
+const io = new Server(httpServer, {
   cors: {
-    origin: '*'
+    origin: "*",
+    methods: ["GET", "POST"]
   }
 });
 
+// ✅ Step 5: Apply middlewares and routes
 app.use(cors());
 app.use(express.json());
 
-app.get("/",(req,res)=>{
-    res.send("Successfully connected to the server");
-})
+app.get("/", (req, res) => {
+  res.send("Successfully connected to the server");
+});
 
-
-// Mount socket
-socketHandler(io);
-
-// Mount API routes
 app.use('/api/rooms', roomRoutes);
 app.use('/api/drawing', drawingRoutes);
 
+// ✅ Step 6: Start socket handler
+socketHandler(io);
 
-const port=process.env.PORT
-app.listen(port,()=>{
-    console.log(`Server is running on port ${port}`);
+// ✅ Step 7: Start the server
+const port = process.env.PORT || 3000;
+httpServer.listen(port, () => {
+  console.log(`✅ Server and socket running on port ${port}`);
 });
