@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const socket = io("https://whiteboardassignment.vercel.app/", {
+const socket = io("https://whiteboardassignment.onrender.com", {
   transports: ["websocket"],
   withCredentials: true
 });
